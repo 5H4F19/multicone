@@ -20,17 +20,17 @@ const GenModel = (modelName,data,callback,mrc) => { // Gen refers to Generate
         
     if (!fs.existsSync(path)) {
         generate('models', name, data)
-        if (mrc) {
+        if (mrc && callback) {
             callback && callback(modelName,controllerData)
-        } else {
+        } else if(callback){
             callback && callback('user', authCntlrData)          
         }
     } else {
         warning()
         prompt(question).then(ans => ans.type === 'yes' ? generate('models', name, data) : failed('Models')).then(() => {
-             if (mrc) {
+             if (mrc && callback) {
             callback && callback(modelName,controllerData)
-            } else {
+            } else if(callback){
             callback && callback('user', authCntlrData)          
         }
         });

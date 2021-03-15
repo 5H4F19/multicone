@@ -8,11 +8,20 @@ import GenCntlr from "./cntlr.gen.js"
 import GenRoute from "./route.gen.js"
 import { initError } from '../utils/console.js'
 import fs from 'fs'
+import authMiddlwareData from '../data/auth.mdwr.data.js'
+import jwtData from '../data/jwt.data.js'
 
+const middlwareData =  authMiddlwareData()
+const JWT = jwtData()
 export const auth = () => {
     const json = process.cwd() + '/package.json'
     if (fs.existsSync(json)) {
         GenModel('user', authModelData, () => GenCntlr('user', authCntlrData, GenRoute))
+
+        fs.mkdirSync('middleware')
+        fs.writeFileSync('middleware/authMiddleware.js', middlwareData)
+        fs.mkdirSync('utils')
+        fs.writeFileSync('utils/JWT.js',JWT)
     } else {
         initError()
     }
